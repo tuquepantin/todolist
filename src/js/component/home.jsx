@@ -13,18 +13,36 @@ const Home = () => {
         setTask(event.target.value)
     }
 
-	const handleSubmit = (event) => {
+	const handleSubmit = async (event) => {
+
 		event.preventDefault()
+		
+		
 	}
 
-	const handleAddTask = (event) => {
-		if (event.key == "Enter") {
-			setAllTasks([...allTasks,task])
-			setTask("")
-		}
+	const handleAddTask = async (event) => {
+		try {
+			if (event.key === "Enter") {
+			  let response = await fetch(`${URLBASE}`, {
+				method: "PUT",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify([...allTasks, { label: task, done: false }]),
+			  })
+			  if (response.ok) {
+				getTask()
+			    setTask("")
+				
+			  } else {
+				console.log("error");
+			  }
+			}
+		  } catch (err) {
+			console.log(err);
+		  }
     }
 
-	const handleDeleteTask = (id) => {
+	const handleDeleteTask = async (id) => {
+		
 		const newTask = allTasks.filter((_,index)=> index != id)
 		setAllTasks(newTask)
 	}
@@ -52,11 +70,10 @@ const Home = () => {
 
 	const createUser = async () => {
 		try{
-			let response = await fetch(`${URLBASE}`, {
+			let response = await fetch(`${URLBASE}`, 
+			{
 				method:'POST',
-				headers:{
-					"Content-Type": "application/json"
-				},
+				headers:{"Content-Type": "application/json"},
 				body:JSON.stringify([])
 			})
 
