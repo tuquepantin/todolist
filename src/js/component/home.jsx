@@ -102,6 +102,27 @@ const Home = () => {
 
 	}
 
+
+	const clear = async () => {
+		try{
+			let response = await fetch(`${URLBASE}`, 
+			    {
+				method:'DELETE'
+				}
+			)
+
+			if(response.ok){
+				getTask()
+			}
+
+			console.log(response)
+
+		}catch(err){
+			console.log(err)
+		}
+
+	}
+
 	useEffect(() => {
 		getTask()
 	}, [])
@@ -128,6 +149,7 @@ const Home = () => {
 					        }
 							<div className='task'>{allTasks.length} item left</div>
 				        </div>
+						<button onClick={() =>clear()} type="button" class="btn btn-danger">Clear</button>
 					</div>
 				</div>
 			</div>
