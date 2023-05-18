@@ -9,16 +9,12 @@ const Home = () => {
 	const [task,setTask] = useState("")
 
     const handleChange = (event) => {
-
-        setTask(event.target.value)
+		setTask(event.target.value)
     }
 
 	const handleSubmit = async (event) => {
-
 		event.preventDefault()
-		
-		
-	}
+		}
 
 	const handleAddTask = async (event) => {
 		try {
@@ -42,9 +38,26 @@ const Home = () => {
     }
 
 	const handleDeleteTask = async (id) => {
-		
-		const newTask = allTasks.filter((_,index)=> index != id)
-		setAllTasks(newTask)
+		try{
+			let newTask = allTasks.filter((_,index)=> index != id)
+
+			let response = await fetch(`${URLBASE}`, 
+			{
+				method:'PUT',
+				headers:{"Content-Type": "application/json"},
+				body:JSON.stringify(newTask)
+			})
+
+			if(response.ok){
+				getTask()
+			}
+
+			console.log(response)
+
+		}catch(err){
+			console.log(err)
+		}
+
 	}
 
 
